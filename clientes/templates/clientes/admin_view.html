@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Administración de Usuarios</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        /* Estilos para la vista de administración de usuarios */
+        body {
+            font-family: 'Roboto', sans-serif;
+            background-color: #f0f4f8;
+            color: #333;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            min-height: 100vh;
+            margin: 0;
+        }
+        h1 {
+            color: #0074e8;
+            margin-bottom: 20px;
+        }
+        .home-btn {
+            margin: 10px;
+            padding: 8px 16px;
+            background-color: #0074e8;
+            color: #ffffff;
+            border: none;
+            border-radius: 5px;
+            text-decoration: none;
+            font-size: 16px;
+            down: 200px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            font-family: 'Roboto', sans-serif;
+        }
+        .home-btn:hover {
+            background-color: #005bb5;
+        }
+        table {
+            width: 100%;
+            max-width: 600px;
+            border-collapse: collapse;
+        }
+        table, th, td {
+            border: 1px solid #ddd;
+        }
+        th, td {
+            padding: 10px;
+            text-align: center;
+        }
+        th {
+            background-color: #0074e8;
+            color: #fff;
+        }
+        .btn {
+            padding: 8px 16px;
+            border-radius: 5px;
+            border: none;
+            cursor: pointer;
+            font-family: 'Roboto', sans-serif;
+        }
+        .btn.edit {
+            background-color: #0074e8;
+            color: #ffffff;
+        }
+        .btn.delete {
+            background-color: #e53935;
+            color: #ffffff;
+        }
+        .btn.create {
+            background-color: #4caf50;
+            color: #ffffff;
+            margin-bottom: 15px;
+        }
+    </style>
+</head>
+<body>
+    <a href="{% url 'lista_clientes' %}" class="home-btn">Home</a>
+    <h1>Administración de Usuarios</h1>
+    <button class="btn create" onclick="window.location.href='{% url 'crear_usuario' %}'">Crear Usuario</button>
+    <table>
+        <thead>
+            <tr>
+                <th>Nombre de Usuario</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for usuario in usuarios %}
+                <tr>
+                    <td>{{ usuario.username }}</td>
+                    <td>
+                        <button class="btn edit" onclick="window.location.href='{% url 'editar_usuario' usuario.id %}'">Editar</button>
+                        <button class="btn delete" onclick="window.location.href='{% url 'eliminar_usuario' usuario.id %}'">Eliminar</button>
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</body>
+</html>

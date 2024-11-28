@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lista de Clientes</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+    {% load static %}
+    <style>
+        body {
+            font-family: 'Roboto', sans-serif;
+            background-color: #f0f4f8;
+            color: #333;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            min-height: 100vh;
+            margin: 0;
+        }
+        h1 {
+            color: #0074e8;
+            margin-bottom: 20px;
+        }
+        .admin-btn, .logout-btn, .home-btn {
+            position: absolute;
+            padding: 8px 16px;
+            background-color: #0074e8;
+            color: #ffffff;
+            border: none;
+            border-radius: 5px;
+            font-size: 15px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            font-family: 'Roboto', sans-serif;
+            text-decoration: none;
+        }
+        .admin-btn:hover, .logout-btn:hover, .home-btn:hover {
+            background-color: #005bb5;
+        }
+        .admin-btn {
+            top: 15px;
+            left: 230px;
+        }
+        .logout-btn {
+            top: 15px;
+            left: 20px;
+        }
+        .home-btn {
+            top: 15px;
+            left: 150px;
+        }
+        .logo-container {
+            position: absolute;
+            top: 15px;
+            right: 20px;
+        }
+        .logo-container img {
+            width: 17vw;
+            height: auto;
+            max-width: 250px;
+            max-height: 100px;
+        }
+        .client-grid {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 25px;
+            width: 90%;
+            max-width: 1280px;
+            justify-content: center;
+        }
+        .client-section {
+            width: 45%;
+            padding: 20px;
+            background-color: #ffffff;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+            text-align: center;
+            position: relative;
+            cursor: pointer;
+            box-sizing: border-box;
+        }
+        .client-section h2 {
+            color: #0074e8;
+            margin-bottom: 5px;
+            font-size: 18px;
+        }
+        .client-image {
+            width: 100%;
+            max-width: 140px;
+            height: auto;
+            margin-bottom: 10px;
+            cursor: pointer;
+        }
+        .dropdown-menu {
+            margin-top: 8px;
+            background-color: #f8f9fa;
+            padding: 10px;
+            border-radius: 5px;
+        }
+        .dropdown-menu button {
+            padding: 8px 16px;
+            font-size: 14px;
+            border-radius: 5px;
+            border: none;
+            background-color: #0074e8;
+            color: #ffffff;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            font-family: 'Roboto', sans-serif;
+            margin-top: 5px;
+        }
+        .dropdown-menu button:hover {
+            background-color: #005bb5;
+        }
+        .download-btn {
+            padding: 8px 16px;
+            font-size: 14px;
+            border-radius: 5px;
+            border: none;
+            background-color: #4caf50;
+            color: #ffffff;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            font-family: 'Roboto', sans-serif;
+            margin-top: 5px;
+        }
+        .download-btn:hover {
+            background-color: #388e3c;
+        }
+        @media (max-width: 768px) {
+            .client-section {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Logo en la parte superior derecha -->
+    <div class="logo-container">
+        <img src="{% static 'images/sonda-logo-cde-transparent.png' %}" alt="Logo SONDA">
+    </div>
+
+    <!-- Botón de Cerrar Sesión -->
+    <a href="{% url 'logout' %}" class="logout-btn">Cerrar Sesión</a>
+    <!-- Botón de Home -->
+    <a href="{% url 'lista_clientes' %}" class="home-btn">Home</a>
+    <!-- Botón de vista administrador -->
+    <button class="admin-btn" onclick="window.location.href='{% url 'admin_view' %}'">Vista Administrador</button>
+
+    <h1>Lista de Clientes</h1>
+
+    <!-- Contenedor de la cuadrícula de clientes -->
+    <div class="client-grid">
+        <!-- Sección de cliente AFP Modelo -->
+        <div class="client-section">
+            <h2>AFP Modelo</h2>
+            <img src="{% static 'images/afpmodelologo.png' %}" alt="Logo AFP Modelo" class="client-image">
+            <div class="dropdown-menu">
+                <input type="file" id="fileInputAFPModelo" class="upload-btn" accept=".xlsx">
+                <button onclick="cargarArchivo('fileInputAFPModelo')">Cargar Archivo</button>
+                <button onclick="iniciarAuditoria()">Iniciar Auditoría AFP Modelo</button>
+                <button class="download-btn" onclick="descargarResultado()">Descargar Resultado</button>
+            </div>
+        </div>
+
+        <!-- Sección de cliente Banco Estado -->
+        <div class="client-section">
+            <h2>Banco Estado</h2>
+            <img src="{% static 'images/bancoestadologo.png' %}" alt="Logo Banco Estado" class="client-image">
+            <div class="dropdown-menu">
+                <input type="file" id="fileInputBancoEstado" class="upload-btn" accept=".xlsx">
+                <button onclick="cargarArchivo('fileInputBancoEstado')">Cargar Archivo</button>
+                <button onclick="iniciarAuditoria()">Iniciar Auditoría Banco Estado</button>
+                <button class="download-btn" onclick="descargarResultado()">Descargar Resultado</button>
+            </div>
+        </div>
+
+        <!-- Sección de cliente Banco Central de Chile -->
+        <div class="client-section">
+            <h2>Banco Central de Chile</h2>
+            <img src="{% static 'images/Banco_Central_de_Chile.png' %}" alt="Logo Banco Central" class="client-image">
+            <div class="dropdown-menu">
+                <input type="file" id="fileInputBancoCentral" class="upload-btn" accept=".xlsx">
+                <button onclick="cargarArchivo('fileInputBancoCentral')">Cargar Archivo</button>
+                <button onclick="iniciarAuditoria()">Iniciar Auditoría Banco Central de Chile</button>
+                <button class="download-btn" onclick="descargarResultado()">Descargar Resultado</button>
+            </div>
+        </div>
+
+        <!-- Sección de cliente INACAP -->
+        <div class="client-section">
+            <h2>INACAP</h2>
+            <img src="{% static 'images/inacap-logo.png' %}" alt="Logo INACAP" class="client-image">
+            <div class="dropdown-menu">
+                <input type="file" id="fileInputINACAP" class="upload-btn" accept=".xlsx">
+                <button onclick="cargarArchivo('fileInputINACAP')">Cargar Archivo</button>
+                <button onclick="iniciarAuditoria()">Iniciar Auditoría INACAP</button>
+                <button class="download-btn" onclick="descargarResultado()">Descargar Resultado</button>
+            </div>
+        </div>
+
+        <!-- Sección de cliente GETNET -->
+        <div class="client-section">
+            <h2>GETNET</h2>
+            <img src="{% static 'images/getnet-logo.png' %}" alt="Logo GETNET" class="client-image">
+            <div class="dropdown-menu">
+                <input type="file" id="fileInputGETNET" class="upload-btn" accept=".csv">
+                <button onclick="cargarArchivo('fileInputGETNET')">Cargar Archivo</button>
+                <button onclick="iniciarAuditoria()">Iniciar Auditoría GETNET</button>
+                <button class="download-btn" onclick="descargarResultado()">Descargar Resultado</button>
+            </div>
+        </div>
+        <!-- Sección de cliente METLIFE -->
+        <div class="client-section">
+            <h2>MetLife</h2>
+            <img src="{% static 'images/logo-metlife.png' %}" alt="Logo MetLife" class="client-image">
+            <div class="dropdown-menu">
+                <input type="file" id="fileInputMetLife" class="upload-btn" accept=".csv">
+                <button onclick="cargarArchivo('fileInputMetLife')">Cargar Archivo</button>
+                <button onclick="iniciarAuditoria()">Iniciar Auditoría MetLife</button>
+                <button class="download-btn" onclick="descargarResultado()">Descargar Resultado</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function cargarArchivo(fileInputId) {
+            const fileInput = document.getElementById(fileInputId);
+            const file = fileInput.files[0];
+            if (!file) {
+                alert("Por favor, selecciona un archivo primero.");
+                return;
+            }
+
+            const formData = new FormData();
+            formData.append('file', file);
+
+            fetch("{% url 'cargar_archivo' %}", {
+                method: "POST",
+                body: formData,
+                headers: {
+                    'X-CSRFToken': '{{ csrf_token }}'
+                }
+            })
+            .then(response => response.json())
+            .then(data => alert(data.message))
+            .catch(error => console.error('Error:', error));
+        }
+
+        function iniciarAuditoria() {
+            fetch("{% url 'iniciar_auditoria' %}", {
+                method: "POST",
+                headers: {
+                    'X-CSRFToken': '{{ csrf_token }}'
+                }
+            })
+            .then(response => response.json())
+            .then(data => alert(data.message))
+            .catch(error => console.error('Error:', error));
+        }
+
+        function descargarResultado() {
+            window.location.href = "{% url 'descargar_resultado' %}";
+        }
+    </script>
+</body>
+</html>
